@@ -4,12 +4,15 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f0f9ff">
-  <meta name="color-scheme" content="only light">
+  <meta name="color-scheme" content="light dark">
   <meta name="darkreader-lock">
   <title>החידון של שיר</title>
   <style>
     :root {
-      color-scheme: only light;
+      color-scheme: light;
+      --surface: #fff;
+      --start-bg: #f0f9ff;
+      --overlay-bg: rgba(255, 255, 255, .95);
       --blue-50: #eff6ff;
       --blue-100: #dbeafe;
       --blue-200: #bfdbfe;
@@ -49,6 +52,50 @@
       --soft-shadow: 0 8px 20px rgba(15, 23, 42, .08);
     }
 
+    html[data-theme="dark"] {
+      color-scheme: dark;
+      --surface: #172033;
+      --start-bg: #0f1b31;
+      --overlay-bg: rgba(2, 6, 23, .94);
+      --blue-50: #172554;
+      --blue-100: #1e3a8a;
+      --blue-200: #1d4ed8;
+      --blue-500: #60a5fa;
+      --blue-600: #93c5fd;
+      --purple-50: #2e1065;
+      --purple-100: #4c1d95;
+      --purple-600: #d8b4fe;
+      --green-50: #052e16;
+      --green-100: #14532d;
+      --green-200: #166534;
+      --green-500: #4ade80;
+      --green-600: #86efac;
+      --green-700: #bbf7d0;
+      --red-50: #450a0a;
+      --red-500: #f87171;
+      --red-700: #fecaca;
+      --amber-50: #291d08;
+      --amber-100: #422d0b;
+      --amber-200: #713f12;
+      --amber-300: #a16207;
+      --amber-500: #fbbf24;
+      --amber-600: #fcd34d;
+      --amber-700: #fde68a;
+      --yellow-100: #422d0b;
+      --yellow-300: #ca8a04;
+      --yellow-400: #facc15;
+      --yellow-700: #fde68a;
+      --slate-50: #0f172a;
+      --slate-100: #1e293b;
+      --slate-200: #334155;
+      --slate-400: #94a3b8;
+      --slate-500: #cbd5e1;
+      --slate-600: #e2e8f0;
+      --slate-700: #f8fafc;
+      --shadow: 0 22px 45px rgba(0, 0, 0, .38);
+      --soft-shadow: 0 8px 20px rgba(0, 0, 0, .24);
+    }
+
     * { box-sizing: border-box; }
 
     html, body { min-height: 100%; }
@@ -80,16 +127,16 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 24px;
+      padding: 76px 24px 24px;
     }
 
-    .screen.start { background: #f0f9ff; }
+    .screen.start { background: var(--start-bg); }
     .screen.end { background: var(--green-50); }
     .screen.board { background: var(--amber-50); }
 
     .panel {
       width: min(100%, 512px);
-      background: #fff;
+      background: var(--surface);
       border-radius: 40px;
       padding: 40px;
       text-align: center;
@@ -174,7 +221,7 @@
     .game-screen {
       min-height: 100vh;
       background: var(--slate-50);
-      padding: 24px;
+      padding: 76px 24px 24px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -191,7 +238,7 @@
 
     .score-pill,
     .question-pill {
-      background: #fff;
+      background: var(--surface);
       border-radius: 17px;
       padding: 9px 16px;
       box-shadow: 0 2px 7px rgba(15, 23, 42, .06);
@@ -225,7 +272,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      background: #fff;
+      background: var(--surface);
       border-radius: 40px;
       border-bottom: 8px solid var(--slate-100);
       box-shadow: 0 16px 30px rgba(15, 23, 42, .11);
@@ -364,7 +411,7 @@
       padding: 17px;
       border: 4px solid var(--slate-200);
       border-radius: 24px;
-      background: #fff;
+      background: var(--surface);
       color: var(--slate-700);
       font-size: clamp(22px, 5vw, 27px);
       font-weight: 900;
@@ -407,7 +454,7 @@
       align-items: center;
       justify-content: center;
       padding: 18px;
-      background: rgba(255, 255, 255, .95);
+      background: var(--overlay-bg);
       backdrop-filter: blur(8px);
       animation: fade .18s ease-out;
     }
@@ -417,7 +464,7 @@
       padding: 38px;
       border: 8px solid var(--yellow-400);
       border-radius: 40px;
-      background: #fff;
+      background: var(--surface);
       box-shadow: var(--shadow);
       text-align: center;
       animation: pop .24s ease-out;
@@ -497,7 +544,7 @@
       padding: 14px;
       border: 2px solid var(--amber-300);
       border-radius: 13px;
-      background: #fff;
+      background: var(--surface);
       color: var(--slate-700);
       text-align: center;
       font-size: 24px;
@@ -547,6 +594,42 @@
     .leader-score { color: var(--blue-600); font-size: 28px; font-weight: 900; }
     .empty-board { margin: 0 0 34px; color: var(--slate-500); font-size: 18px; font-weight: 700; }
 
+    .board-status {
+      min-height: 24px;
+      margin: 4px 0 16px;
+      color: var(--slate-500);
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .board-status.error { color: var(--red-700); }
+
+    button:disabled { cursor: not-allowed; opacity: .62; }
+
+    .theme-toggle {
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      z-index: 30;
+      min-height: 44px;
+      padding: 9px 14px;
+      border: 2px solid var(--slate-200);
+      border-radius: 999px;
+      background: var(--surface);
+      color: var(--slate-700);
+      box-shadow: var(--soft-shadow);
+      font-size: 16px;
+      font-weight: 900;
+      transition: transform .13s ease, background .2s ease, color .2s ease;
+    }
+
+    .theme-toggle:active { transform: scale(.97); }
+
+    html[data-theme="dark"] .emoji-picture,
+    html[data-theme="dark"] .hero-icon {
+      filter: drop-shadow(0 7px 6px rgba(0, 0, 0, .42));
+    }
+
     .sr-only {
       position: absolute;
       width: 1px;
@@ -570,9 +653,9 @@
     }
 
     @media (max-width: 560px) {
-      .screen { padding: 16px; }
+      .screen { padding: 68px 16px 16px; }
       .panel { padding: 30px 22px; border-radius: 32px; }
-      .game-screen { padding: 12px; }
+      .game-screen { padding: 68px 12px 12px; }
       .topbar { margin-bottom: 14px; }
       .score-pill { font-size: 20px; padding: 8px 12px; }
       .question-pill { font-size: 15px; padding: 8px 11px; }
@@ -592,6 +675,9 @@
   </style>
 </head>
 <body>
+  <button class="theme-toggle" id="theme-toggle" type="button" aria-pressed="false">
+    <span aria-hidden="true">🌙</span> <span>מצב כהה</span>
+  </button>
   <div id="app" aria-live="polite"></div>
 
   <script>
@@ -673,6 +759,31 @@
 
     const QUESTIONS_PER_GAME = 10;
     const app = document.getElementById("app");
+    const themeToggle = document.getElementById("theme-toggle");
+    const themeColor = document.querySelector('meta[name="theme-color"]');
+    const THEME_KEY = "shirsEnglishTheme";
+    const SUPABASE_URL = "https://roxyuqmpvgastlkdpknl.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJveHl1cW1wdmdhc3Rsa2Rwa25sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3NjA4OTUsImV4cCI6MjEwNDMzNjg5NX0.oJyGBnlPfWscRs_MioKiDjgoSnjiF9u6V9AxnBvDY9U";
+    const LEADERBOARD_GAME_ID = "game2";
+
+    function applyTheme(theme) {
+      const isDark = theme === "dark";
+      document.documentElement.dataset.theme = isDark ? "dark" : "light";
+      themeToggle.setAttribute("aria-pressed", String(isDark));
+      themeToggle.setAttribute("aria-label", isDark ? "מעבר למצב בהיר" : "מעבר למצב כהה");
+      themeToggle.innerHTML = isDark
+        ? '<span aria-hidden="true">☀️</span> <span>מצב בהיר</span>'
+        : '<span aria-hidden="true">🌙</span> <span>מצב כהה</span>';
+      themeColor?.setAttribute("content", isDark ? "#0f172a" : "#f0f9ff");
+      try { localStorage.setItem(THEME_KEY, isDark ? "dark" : "light"); } catch (_) {}
+    }
+
+    let savedTheme = "light";
+    try { savedTheme = localStorage.getItem(THEME_KEY) === "dark" ? "dark" : "light"; } catch (_) {}
+    applyTheme(savedTheme);
+    themeToggle.addEventListener("click", () => {
+      applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+    });
 
     const state = {
       screen: "start",
@@ -688,6 +799,10 @@
       playerName: "שיר",
       leaderboard: [],
       isHighScore: false,
+      leaderboardLoading: false,
+      leaderboardError: "",
+      savingScore: false,
+      saveError: "",
       timer: null,
       audioMessage: ""
     };
@@ -785,6 +900,8 @@
       state.gameWords = shuffle(WORDS).slice(0, QUESTIONS_PER_GAME);
       state.index = 0;
       state.score = 0;
+      state.saveError = "";
+      state.savingScore = false;
       state.screen = "play";
       setupQuestion(state.gameWords[0]);
       render();
@@ -793,7 +910,7 @@
     function finishGame() {
       state.screen = "end";
       state.isHighScore = state.score > 0 && (
-        state.leaderboard.length < 5 ||
+        state.leaderboard.length < 10 ||
         state.score > (state.leaderboard[state.leaderboard.length - 1]?.score || 0)
       );
       render();
@@ -832,16 +949,74 @@
       }
     }
 
-    function saveScore() {
+    function leaderboardHeaders() {
+      return {
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${SUPABASE_ANON_KEY}`
+      };
+    }
+
+    async function loadLeaderboard(refreshScreen = true) {
+      state.leaderboardLoading = true;
+      state.leaderboardError = "";
+      if (refreshScreen && state.screen === "leaderboard") render();
+      try {
+        const query = "select=player_name,score&game_id=eq.game2&order=score.desc,created_at.asc&limit=10";
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/shir_leaderboard?${query}`, {
+          headers: leaderboardHeaders()
+        });
+        if (!response.ok) throw new Error("load failed");
+        state.leaderboard = (await response.json()).map(entry => ({
+          name: entry.player_name,
+          score: entry.score
+        }));
+      } catch (_) {
+        state.leaderboardError = "לא הצלחנו לטעון את הטבלה. בדקו את החיבור ונסו שוב.";
+      } finally {
+        state.leaderboardLoading = false;
+        if (refreshScreen && state.screen === "leaderboard") render();
+      }
+    }
+
+    function openLeaderboard() {
+      state.screen = "leaderboard";
+      state.leaderboardLoading = true;
+      render();
+      void loadLeaderboard(true);
+    }
+
+    async function saveScore() {
       const input = document.getElementById("player-name");
       const name = input?.value.trim() || "שחקן לא ידוע";
       state.playerName = name;
-      state.leaderboard = [...state.leaderboard, { name, score: state.score }]
-        .sort((a, b) => b.score - a.score)
-        .slice(0, 5);
-      state.isHighScore = false;
-      state.screen = "leaderboard";
+      if (state.score < 1) {
+        state.saveError = "צריך לצבור לפחות נקודה אחת לפני שמירת התוצאה.";
+        render();
+        return;
+      }
+      state.savingScore = true;
+      state.saveError = "";
       render();
+      try {
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/shir_leaderboard`, {
+          method: "POST",
+          headers: {
+            ...leaderboardHeaders(),
+            "Content-Type": "application/json",
+            Prefer: "return=minimal"
+          },
+          body: JSON.stringify({ game_id: LEADERBOARD_GAME_ID, player_name: name, score: state.score })
+        });
+        if (!response.ok) throw new Error("save failed");
+        await loadLeaderboard(false);
+        state.isHighScore = false;
+        state.screen = "leaderboard";
+        render();
+      } catch (_) {
+        state.saveError = "לא הצלחנו לשמור. בדקו את החיבור ונסו שוב.";
+        state.savingScore = false;
+        render();
+      }
     }
 
     function renderStart() {
@@ -852,13 +1027,12 @@
             <h1 class="title" id="start-title">החידון של שיר</h1>
             <p class="subtitle">משחק קצר של ${QUESTIONS_PER_GAME} שאלות!<br>עני נכון מבלי לראות תמונה — וקבלי כפול נקודות!</p>
             <button class="primary" id="start-game">בואי נתחיל! 🚀</button>
-            ${state.leaderboard.length ? '<button class="secondary" id="show-board">🏅 טבלת האלופים</button>' : ''}
+            <button class="secondary" id="show-board">🏅 טבלת האלופים</button>
           </section>
         </main>`;
       document.getElementById("start-game").addEventListener("click", startNewGame);
       document.getElementById("show-board")?.addEventListener("click", () => {
-        state.screen = "leaderboard";
-        render();
+        openLeaderboard();
       });
     }
 
@@ -942,21 +1116,20 @@
             <div class="hero-icon" aria-hidden="true">🏆</div>
             <h1 class="title end-title" id="end-title">סיימת את המשחק!</h1>
             <div class="score-box">הציון הסופי שלך:<strong class="final-score">${state.score}</strong></div>
-            ${state.isHighScore ? `
-              <section class="high-score" aria-labelledby="high-score-title">
-                <h3 id="high-score-title">🎉 שיא חדש! 🎉</h3>
-                <p>נכנסת לטבלת חמשת הגדולים!</p>
-                <label class="sr-only" for="player-name">הכניסי את שמך</label>
-                <input class="name-input" id="player-name" type="text" value="${escapeHtml(state.playerName)}" maxlength="20" placeholder="הכניסי את שמך">
-                <button class="primary save-score" id="save-score">שמרי בטבלת האלופים!</button>
-              </section>` : `
-              <button class="primary" id="view-board">🏅 צפייה בטבלת האלופים</button>`}
+            <section class="high-score" aria-labelledby="high-score-title">
+              <h3 id="high-score-title">${state.isHighScore ? "🎉 שיא חדש! 🎉" : "🏆 שמירת התוצאה"}</h3>
+              <p>${state.isHighScore ? "נכנסת לעשרת המובילים!" : "אפשר לשמור את התוצאה בטבלה המשותפת."}</p>
+              <label for="player-name">שם פרטי או כינוי שיוצג לכולם</label>
+              <input class="name-input" id="player-name" type="text" value="${escapeHtml(state.playerName)}" maxlength="20" autocomplete="nickname" placeholder="לדוגמה: שיר" ${state.savingScore ? "disabled" : ""}>
+              <button class="primary save-score" id="save-score" ${state.savingScore ? "disabled" : ""}>${state.savingScore ? "שומרת…" : "שמרי בטבלת האלופים!"}</button>
+              <p class="board-status ${state.saveError ? "error" : ""}" role="status">${escapeHtml(state.saveError)}</p>
+            </section>
+            <button class="secondary" id="view-board">🏅 צפייה בטבלת האלופים</button>
           </section>
         </main>`;
       document.getElementById("save-score")?.addEventListener("click", saveScore);
       document.getElementById("view-board")?.addEventListener("click", () => {
-        state.screen = "leaderboard";
-        render();
+        openLeaderboard();
       });
     }
 
@@ -966,7 +1139,9 @@
           <section class="panel" aria-labelledby="board-title">
             <div class="hero-icon" aria-hidden="true">🏅</div>
             <h1 class="title board-title" id="board-title">טבלת האלופים 🏆</h1>
-            ${state.leaderboard.length ? `
+            ${state.leaderboardLoading ? `<p class="empty-board">טוענת את הטבלה…</p>` : state.leaderboardError ? `
+              <p class="board-status error">${escapeHtml(state.leaderboardError)}</p>
+              <button class="secondary" id="retry-board">↻ ניסיון נוסף</button>` : state.leaderboard.length ? `
               <div class="leader-list">
                 ${state.leaderboard.map((entry, index) => `
                   <div class="leader-row ${index === 0 ? "first" : ""}">
@@ -979,6 +1154,7 @@
           </section>
         </main>`;
       document.getElementById("new-game").addEventListener("click", startNewGame);
+      document.getElementById("retry-board")?.addEventListener("click", () => loadLeaderboard(true));
       document.getElementById("back-home").addEventListener("click", () => {
         state.screen = "start";
         render();
@@ -994,6 +1170,7 @@
 
     window.speechSynthesis?.getVoices?.();
     render();
+    void loadLeaderboard(false);
   </script>
 </body>
 </html>
